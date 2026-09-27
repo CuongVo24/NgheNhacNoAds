@@ -1,0 +1,91 @@
+[project]
+name = "nghenhacnoads"
+version = "0.1.0.dev0"
+description = "Ad-free YouTube Music player for the terminal, remote-controlled from your phone over SSH"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "CuongVo24" }]
+requires-python = ">=3.11"
+keywords = ["youtube", "youtube-music", "music-player", "tui", "ssh", "yt-dlp", "mpv"]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Environment :: Console",
+    "Intended Audience :: End Users/Desktop",
+    "Natural Language :: English",
+    "Natural Language :: Vietnamese",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Multimedia :: Sound/Audio :: Players",
+]
+dependencies = [
+    "asyncssh>=2.14.2",
+    "filelock>=3.12",
+    "httpx>=0.27",
+    "platformdirs>=4.0",
+    "prompt-toolkit>=3.0.43",
+    "pydantic>=2.7",
+    "tomlkit>=0.12",
+    "yt-dlp[default]>=2026.8.19",
+    "ytmusicapi>=1.8",
+]
+
+[project.urls]
+Homepage = "https://github.com/CuongVo24/NgheNhacNoAds"
+Issues = "https://github.com/CuongVo24/NgheNhacNoAds/issues"
+
+[project.scripts]
+nghenhacnoads = "nghenhacnoads.cli:main"
+
+[dependency-groups]
+dev = [
+    "mypy>=1.11",
+    "pytest>=8.0",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+# Only needed to run the M0 spike scripts in spikes/.
+spikes = [
+    "pyte>=0.8.2",
+    "winrt-runtime>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Foundation>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Foundation.Collections>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Media>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Media.Control>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Media.Playback>=3.2; sys_platform == 'win32'",
+    "winrt-Windows.Storage.Streams>=3.2; sys_platform == 'win32'",
+]
+
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/nghenhacnoads"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+# Code blocks in docs/ are illustrative sketches, not source files.
+extend-exclude = ["docs"]
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "UP", "B", "SIM", "RUF", "ASYNC"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["src", "tests"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+    "network: calls real online services (YouTube, YouTube Music, LRCLIB)",
+    "mpv: needs the mpv binary",
+]
